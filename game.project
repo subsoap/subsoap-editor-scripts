@@ -1,0 +1,6 @@
+[library]
+include_dirs = subsoap-editor-scripts
+
+[project]
+title = subsoap-editor-scripts
+

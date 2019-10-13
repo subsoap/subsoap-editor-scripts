@@ -1,0 +1,95 @@
+local M = {}
+M.VERBOSE = false
+
+local function sound_template(path)
+return
+[[sound: "]] .. path .. [["
+looping: 0
+group: "master"
+gain: 1.0
+pan: 0.0
+speed: 1.0]]
+end
+
+function file_exists(name)
+    local f=io.open(name,"r")
+    if f~=nil then io.close(f) return true else return false end
+end
+
+function get_filename(path)   
+    local main, filename, extension = path:match("(.-)([^\\/]-%.?([^%.\\/]*))$")
+    return main, filename
+end
+
+local function is_audio(node_id)
+    local path = editor.get(node_id, 'path')
+    return path:find('.ogg', nil, true) or path:find('.wav', nil, true)
+end
+
+local function make_audio_component(path)
+    local main, filename = get_filename(path)
+
+    local target_path = "." .. main .. filename:match("(.+)%..+") .. ".sound"
+    if file_exists(target_path) then
+        if M.VERBOSE then print("make_audio_component: sound already exists", target_path) end
+        return false
+    end
+    local file = sound_template(main .. filename)
+    if M.VERBOSE then print(file) end
+    local sound = io.open(target_path, "w")
+    sound:write(file)
+    sound:close()
+end
+
+function M.get_commands()
+    return {
+        {
+            label = 'Create Sound Component',
+            locations = {'Assets'},
+            query = {
+                selection = { type = 'resource', cardinality = 'one' }
+            },
+            active = function(opts)
+                if not is_audio(opts.selection) then
+                    return false
+                end
+                return true
+            end,
+            run = function(opts)
+                if M.VERBOSE then print("Create Sound Component: Run") end
+                local path = editor.get(opts.selection, 'path')
+                if M.VERBOSE then print("path: ", path) end
+                make_audio_component(path)
+            end,
+        },
+        {
+            label = 'Create Sound Components',
+            locations = {'Assets'},
+            query = {
+                selection = { type = 'resource', cardinality = 'many' }
+            },
+            active = function(opts)
+                local count = 0
+                for _, node_id in ipairs(opts.selection) do
+                    count = count + 1
+                    if not is_audio(node_id) then
+                        return false
+                    end
+                end
+                if count <= 1 then return false end
+                return true
+            end,
+            run = function(opts)
+                if M.VERBOSE then print("Create Sound Components: Run") end
+                for _, node_id in ipairs(opts.selection) do
+                    local path = editor.get(node_id, 'path')
+                    if M.VERBOSE then print("path: ", path) end
+                    make_audio_component(path)
+                end
+            end,
+        }        
+
+    }
+end
+
+return M
