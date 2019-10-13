@@ -11,12 +11,12 @@ pan: 0.0
 speed: 1.0]]
 end
 
-function file_exists(name)
+local function file_exists(name)
     local f=io.open(name,"r")
     if f~=nil then io.close(f) return true else return false end
 end
 
-function get_filename(path)   
+local function get_filename(path)   
     local main, filename, extension = path:match("(.-)([^\\/]-%.?([^%.\\/]*))$")
     return main, filename
 end
