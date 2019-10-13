@@ -3,7 +3,7 @@ Editor scripts for Defold
 
 ## Install
 
-https://github.com/subsoap/defos/archive/master.zip
+https://github.com/subsoap/subsoap-editor-scripts/archive/master.zip
 
 
 ## create_sound_component.editor_script
