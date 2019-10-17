@@ -26,7 +26,7 @@ local function is_audio(node_id)
     return path:find(".ogg", nil, true) or path:find(".wav", nil, true)
 end
 
-local function make_audio_component(path)
+local function make_sound_component(path)
     local main, filename = get_filename(path)
 
     local target_path = "." .. main .. filename:match("(.+)%..+") .. ".sound"
@@ -59,7 +59,7 @@ function M.get_commands()
                 if M.VERBOSE then print("Create Sound Component: Run") end
                 local path = editor.get(opts.selection, "path")
                 if M.VERBOSE then print("path: ", path) end
-                make_audio_component(path)
+                make_sound_component(path)
             end,
         },
         {
@@ -84,7 +84,7 @@ function M.get_commands()
                 for _, node_id in ipairs(opts.selection) do
                     local path = editor.get(node_id, "path")
                     if M.VERBOSE then print("path: ", path) end
-                    make_audio_component(path)
+                    make_sound_component(path)
                 end
             end,
         }        
