@@ -4,3 +4,9 @@ include_dirs = subsoap-editor-scripts
 [project]
 title = subsoap-editor-scripts
 
+[bootstrap]
+main_collection = /example/main.collectionc
+
+[input]
+game_binding = /example/example.input_bindingc
+

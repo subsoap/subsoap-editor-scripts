@@ -1,0 +1,34 @@
+local M = {}
+
+function M.on_build_finished(opts)
+	print("on_build_finished")
+	if not opts.success then
+		return {
+			{
+				action = "shell", 
+				command = {"ffplay", "./bundle_finished_fail.mp3", "-loglevel", "warning", "-autoexit", "-nodisp"}
+			}
+		}	
+	end
+end
+
+function M.on_bundle_finished(opts)
+	print("on_bundle_finished")
+	if opts.success then
+		return {
+			{
+				action = "shell", 
+				command = {"ffplay", "./bundle_finished_success.mp3", "-loglevel", "warning", "-autoexit", "-nodisp"}
+			}
+		}
+	else
+		return {
+			{
+				action = "shell", 
+				command = {"ffplay", "./bundle_finished_fail.mp3", "-loglevel", "warning", "-autoexit", "-nodisp"}
+			}
+		}	
+	end
+end
+
+return M

@@ -1,0 +1,1 @@
+* Add a rename-extension right click context to edit the file extension of a file - need to be able to select all files though and have a text input popup
